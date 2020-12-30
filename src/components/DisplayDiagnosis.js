@@ -5,7 +5,7 @@ import Modal from 'react-modal'
 Modal.setAppElement('#root')
 
 const DisplayDiagnosis = ({selectedSymptoms, selectedGender, 
-  selectedYob, openModal, setopenModal, setSelectedGender, setSelectedSymptoms, setSelectedYob}) => {
+  selectedYob, openModal, setopenModal}) => {
 
   let symptoms = [JSON.stringify(selectedSymptoms)]
   let sex = [selectedGender]
@@ -24,20 +24,18 @@ const DisplayDiagnosis = ({selectedSymptoms, selectedGender,
        setDiagnosisres(response.data)
       }catch(err){
           console.log(err)
-          return <div style={{color: 'red'}} > Request exceeded, Please try later</div>
+          return <div className='error'> 
+          Something went wrong, Please try later
+          </div>
          }}
   getDiagnosis()
        
    }},[diagnosis,selectedSymptoms, selectedGender, selectedYob])
 
-  //  const {Issue:{Name}, Specialisation: {Name: speName}} = diagnosisres || {}
-
-  
    
-    
   return(
     <>
-    {diagnosisres && (
+    {selectedSymptoms !== [] && selectedGender !=='' && selectedYob !== '' && diagnosisres !== [] ?
     <Modal isOpen={openModal} onRequestClose={()=> setopenModal(false)}>
         <div className='modal-content'
          style={{
@@ -65,16 +63,20 @@ const DisplayDiagnosis = ({selectedSymptoms, selectedGender,
             float: 'right',
             cursor: 'pointer'
           }}
-          onClick={() => (setopenModal(false))} >
+          onClick={()=>setopenModal(false)}>
           <p> CLOSE </p>
         </div>
 
-    </Modal>
-    )}
+    </Modal>  : (
+    
+      <div className='error'>
+        Please check that the form is filled in correctly before submitting
+      </div>)
+    
+  }
 
-    </>
+  </>
   )
-  
 }
 
 export default DisplayDiagnosis

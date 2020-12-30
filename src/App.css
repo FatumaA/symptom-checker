@@ -73,6 +73,7 @@ button{
   display: block;
   margin-bottom: 5px;
   width: 100%;
+  border: none;
 }
 .btn-primary:hover{
   background-color: #01413b;
@@ -140,8 +141,11 @@ button{
   } 
 }
 @media screen and (max-width: 600px){
+  .form-container{
+    padding: 50px;
+  }
   label{
-    font-size: 14px;
+    font-size: 12px;
   }
   .headline{
     font-size: 28px;
@@ -149,4 +153,29 @@ button{
   .hero-text{
     font-size: 24px;
   }
+}
+@media screen and (max-width: 380px){
+  .form-container{
+    padding: 30px;
+    margin-top: -150px;
+  }
+  label{
+    font-size: 12px;
+  }
+  ::placeholder{
+    font-size: 8px;
+  }
+  .headline{
+    font-size: 24px;
+  }
+  .hero-text{
+    font-size: 20px;
+  }
+}
+@media screen and (max-width: 330px){
+  .form-container{
+    padding: 20px;
+    margin-top: -80px;
+  }
+  
 }

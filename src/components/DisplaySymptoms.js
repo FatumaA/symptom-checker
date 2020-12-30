@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import Select from 'react-select'
-import Loading from './Loading'
+// import {useForm, Controller} from 'react-hook-form'
 import DisplayDiagnosis from './DisplayDiagnosis';
 
 
@@ -9,10 +9,11 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
   const [selectedSymptoms, setSelectedSymptoms] = useState([])
   const [selectedGender, setSelectedGender] = useState('')
   const [selectedYob, setSelectedYob] = useState('')
-
+  
   const [openModal, setopenModal] = useState(false)
   
- 
+  
+  // const {reset, control} = useForm()
   
   const handleChange = (e)=>{
           setSelectedSymptoms(Array.isArray(e)? e.map(x => x.value): [] );
@@ -26,9 +27,8 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
   const handleChangeYob=(e) => {
       setSelectedYob(e.label)
     }
+       
    
- 
-
   const options= symptoms.map(symptom => ({
     'value': symptom.ID,
     'label': symptom.Name
@@ -50,18 +50,24 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
  
     const yob= years.map((year, index) => ({
       'value': index,
+
       'label': year
     }))
 
   
     function handleSubmit(e){
       e.preventDefault()
-     
-      }
+    }
+
+
+    const handleReset = () => { 
+      setSelectedSymptoms([]);
+      setSelectedGender('');
+      setSelectedYob('');  
+  }
   
   return (
-    // isLoading? <div className='error'> App unavailable, please try later</div>
-    // : 
+    isLoading? <div className='error'> App unavailable, please try later</div>: 
     <>
     <div className='form-container'>
     <form  onSubmit ={handleSubmit}>
@@ -80,13 +86,13 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
             />
         
     <label htmlFor='Gender-input'>Please select your gender</label>
-        <Select 
+         <Select 
           className='holds-results'
           placeholder='Select Gender'
           value={gender.find(selectedGender => selectedGender.value === selectedGender)}
           onChange={handleChangeGender}
-          options={gender} 
-          defaultInputValue=''
+          options={gender}
+          defaultValue=''
           />
       
       <label htmlFor='Birthyear-input'>Please select your birth year</label>
@@ -99,19 +105,18 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
           isSearchable 
           defaultValue=''
           /> 
+    
+    <button type='submit' className='btn-primary' 
+    onClick={()=>setopenModal(true)}> Submit </button>
   
-    <button type='submit' className='btn-primary' onClick={()=> setopenModal(true)} > Submit </button>
-  
-    <button className='btn-secondary' > Reset Form </button>
+    <button className='btn-secondary' 
+    onClick={handleReset}> Reset Form </button>
       
     </form>
 
     <DisplayDiagnosis selectedSymptoms={selectedSymptoms} 
-        setSelectedSymptoms={setSelectedSymptoms}
-        selectedGender={selectedGender}
-        setSelectedGender={setSelectedGender} 
         selectedYob={selectedYob}
-        setSelectedYob={setSelectedYob}
+        selectedGender={selectedGender}
         openModal={openModal}
         setopenModal={setopenModal}
         />
