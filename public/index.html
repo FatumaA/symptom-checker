@@ -16,5 +16,13 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <!-- <script src="js/hmac-md5.js"></script>                        
+<script src="js/enc-base64-min.js"></script>
+<script>
+    const uri = "https://authservice.priaid.ch/login";
+    const secret_key = `${process.env.REACT_APP_KEY}`;
+    const computedHash = CryptoJS.HmacMD5(uri, secret_key);
+    const computedHashString = computedHash.toString(CryptoJS.enc.Base64);     
+</script> -->
   </body>
 </html>

@@ -7,22 +7,25 @@ Modal.setAppElement('#root')
 const DisplayDiagnosis = ({selectedSymptoms, selectedGender, 
   selectedYob, openModal, setopenModal}) => {
 
+  
   let symptoms = [JSON.stringify(selectedSymptoms)]
   let sex = [selectedGender]
   let yob = [JSON.stringify(selectedYob)]
   
-  const diagnosis =`https://sandbox-healthservice.priaid.ch/diagnosis?token=${process.env.REACT_APP_KEY}&language=en-gb&symptoms=${symptoms}&gender=${sex}&year_of_birth=${yob}`
+
+  const diagnosis =`https://healthservice.priaid.ch/login/diagnosis?token=${process.env.REACT_APP_TOKEN}&language=en-gb&symptoms=${symptoms}&gender=${sex}&year_of_birth=${yob}`
   
   const [diagnosisres, setDiagnosisres] = useState([])
   useEffect (() => {
     if(selectedGender !== '' && selectedSymptoms !== [] && selectedYob !==''){
       const getDiagnosis = async () => { 
-      try{
+      try {
        const response = await axios(diagnosis) 
 
        console.log(response.data)
        setDiagnosisres(response.data)
-      }catch(err){
+     }
+      catch(err){
           console.log(err)
           return <div className='error'> 
           Something went wrong, Please try later
@@ -47,7 +50,12 @@ const DisplayDiagnosis = ({selectedSymptoms, selectedGender,
         style={{
           marginBottom: '30px'
         }}> Your Diagnosis in Order of Likelihood </h3> 
-
+         
+         {diagnosisres === [] || null }{ <div className='error'> 
+          No symptoms available for stated conditions
+        </div> }
+       
+        
         {diagnosisres.map((item) => {
           return <li 
             key={item.id}
@@ -63,7 +71,7 @@ const DisplayDiagnosis = ({selectedSymptoms, selectedGender,
             float: 'right',
             cursor: 'pointer'
           }}
-          onClick={()=>setopenModal(false)}>
+          onClick={setopenModal(false)}>
           <p> CLOSE </p>
         </div>
 
