@@ -71,7 +71,7 @@ const DisplayDiagnosis = ({selectedSymptoms, selectedGender,
             float: 'right',
             cursor: 'pointer'
           }}
-          onClick={setopenModal(false)}>
+          onClick={()=>setopenModal(false)}>
           <p> CLOSE </p>
         </div>
 
