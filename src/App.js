@@ -14,7 +14,7 @@ const App= () => {
     const computedHash = HmacMD5(url, secretKey)
     const computedHashString = computedHash.toString(EncBase64)
 
-    console.log(computedHashString)
+    // console.log(computedHashString)
     
     
 
