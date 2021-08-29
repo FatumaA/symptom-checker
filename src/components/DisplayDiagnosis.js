@@ -4,24 +4,30 @@ import Modal from 'react-modal'
 
 Modal.setAppElement('#root')
 
-const DisplayDiagnosis = ({selectedSymptoms, selectedGender, 
-  selectedYob, openModal, setopenModal}) => {
+const DisplayDiagnosis = ({selectedSymptoms, selectedGender, selectedYob, openModal, setopenModal, handleReset}) => {
 
   
-  let symptoms = [JSON.stringify(selectedSymptoms)]
-  let sex = [selectedGender]
-  let yob = [JSON.stringify(selectedYob)]
-  
+  let symptoms = [selectedSymptoms]
+  let sex = selectedGender
+  let yob = selectedYob
 
-  const diagnosis =`https://healthservice.priaid.ch/login/diagnosis?token=${process.env.REACT_APP_TOKEN}&language=en-gb&symptoms=${symptoms}&gender=${sex}&year_of_birth=${yob}`
-  
   const [diagnosisres, setDiagnosisres] = useState([])
-  useEffect (() => {
-    if(selectedGender !== '' && selectedSymptoms !== [] && selectedYob !==''){
-      const getDiagnosis = async () => { 
-      try {
-       const response = await axios(diagnosis) 
+  
+  const diagnosis =`https://healthservice.priaid.ch/login/diagnosis?token=${window.localStorage.getItem('authToken')}&language=en-gb&symptoms=${symptoms}&gender=${sex?.value}&year_of_birth=${yob?.value}`
+  
 
+
+  
+    console.log('symptoms', symptoms)
+    console.log('gender', sex)
+    console.log('birthday', yob)
+
+  useEffect (() => {
+    const getDiagnosis = async () => { 
+      try {
+        debugger
+       const response = await axios(diagnosis) 
+        debugger
        console.log(response.data)
        setDiagnosisres(response.data)
      }
@@ -30,16 +36,19 @@ const DisplayDiagnosis = ({selectedSymptoms, selectedGender,
           return <div className='error'> 
           Something went wrong, Please try later
           </div>
-         }}
-  getDiagnosis()
+         }
+        
+      }
+      getDiagnosis()
+      console.log('DIAGNOSIS RES!!!!!!!!!', diagnosisres)
        
-   }},[diagnosis,selectedSymptoms, selectedGender, selectedYob])
+  },[])
 
    
   return(
     <>
-    {selectedSymptoms !== [] && selectedGender !=='' && selectedYob !== '' && diagnosisres !== [] ?
-    <Modal isOpen={openModal} onRequestClose={()=> setopenModal(false)}>
+    {(diagnosisres !== [] || undefined) &&
+     <Modal isOpen={openModal} onRequestClose={()=> { setopenModal(false); handleReset()}}>
         <div className='modal-content'
          style={{
           display:'inline',
@@ -51,7 +60,7 @@ const DisplayDiagnosis = ({selectedSymptoms, selectedGender,
           marginBottom: '30px'
         }}> Your Diagnosis in Order of Likelihood </h3> 
          
-         {diagnosisres === [] || null }{ <div className='error'> 
+         {(diagnosisres === [] || null)}{ <div className='error'> 
           No symptoms available for stated conditions
         </div> }
        
@@ -75,16 +84,10 @@ const DisplayDiagnosis = ({selectedSymptoms, selectedGender,
           <p> CLOSE </p>
         </div>
 
-    </Modal>  : (
-    
-      <div className='error'>
-        Please check that the form is filled in correctly before submitting
-      </div>)
-    
-  }
-
-  </>
+    </Modal> }
+   </>
   )
 }
+
 
 export default DisplayDiagnosis

@@ -1,6 +1,5 @@
 import {useState} from 'react'
 import Select from 'react-select'
-// import {useForm, Controller} from 'react-hook-form'
 import DisplayDiagnosis from './DisplayDiagnosis';
 
 
@@ -20,14 +19,13 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
         }
    
   
-  const handleChangeGender =(e) => {
-    setSelectedGender(e.value)
+  const handleChangeGender =(selectedGender) => {
+    setSelectedGender(selectedGender)
     }
   
-  const handleChangeYob=(e) => {
-      setSelectedYob(e.label)
+  const handleChangeYob=(selectedYob) => {
+      setSelectedYob(selectedYob)
     }
-       
    
   const options= symptoms.map(symptom => ({
     'value': symptom.ID,
@@ -48,26 +46,35 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
                1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
                2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020]
  
-    const yob= years.map((year, index) => ({
-      'value': index,
-
-      'label': year
-    }))
+    const yob= years.map((year, index) => ({ 'value': year, 'label': year }))
 
   
     function handleSubmit(e){
       e.preventDefault()
+      if(selectedSymptoms !== [] && selectedGender !==( ''||null ) && selectedYob !== ( ''||null )) {
+         setopenModal(true);
+      } else { 
+
+        return (
+        <div className='error'>
+            Please check that the form is filled in correctly before submitting
+        </div>
+        )
+      }
+      // handleReset(e)
     }
 
 
-    const handleReset = () => { 
+    const handleReset = (e) => { 
+      e.preventDefault()
       setSelectedSymptoms([]);
-      setSelectedGender('');
-      setSelectedYob('');  
+      setSelectedGender(null);
+      setSelectedYob(null);  
   }
-  
+  // <div className='error'> App unavailable, please try later</div>
+  // <img scr='https://media.giphy.com/media/WiIuC6fAOoXD2/giphy.gif' alt=''/>
   return (
-    isLoading? <div className='error'> App unavailable, please try later</div>: 
+    isLoading?  <div className='error'> App unavailable, please try later</div> :
     <>
     <div className='form-container'>
     <form  onSubmit ={handleSubmit}>
@@ -89,7 +96,8 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
          <Select 
           className='holds-results'
           placeholder='Select Gender'
-          value={gender.find(selectedGender => selectedGender.value === selectedGender)}
+          // value={gender.find(selectedGender => selectedGender.value === selectedGender.value)}
+          value = {selectedGender}
           onChange={handleChangeGender}
           options={gender}
           defaultValue=''
@@ -99,7 +107,8 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
           <Select 
           className='holds-results'
           placeholder='Select year'
-          value={yob.find(selectedYob => selectedYob.label === selectedYob)}
+          // value={yob.find(selectedYob => selectedYob.label === selectedYob.value)}
+          value = {selectedYob}
           onChange={handleChangeYob}
           options={yob}
           isSearchable 
@@ -107,18 +116,20 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
           /> 
     
     <button type='submit' className='btn-primary' 
-    onClick={()=>setopenModal(true)}> Submit </button>
-  
-    <button className='btn-secondary' 
-    onClick={handleReset}> Reset Form </button>
-      
+    // onClick={()=>setopenModal(true)}
+    > Submit </button>
+
     </form>
+
+    <button className='btn-secondary'
+    onClick={handleReset}> Reset Form </button>
 
     <DisplayDiagnosis selectedSymptoms={selectedSymptoms} 
         selectedYob={selectedYob}
         selectedGender={selectedGender}
         openModal={openModal}
         setopenModal={setopenModal}
+        handleReset={handleReset} 
         />
   </div> 
     </>
