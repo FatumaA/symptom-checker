@@ -1,14 +1,5 @@
 import axios from 'axios'
-import HmacMD5 from 'crypto-js/hmac-md5';
-import EncBase64 from 'crypto-js/enc-base64'
-
-
-const url ='https://authservice.priaid.ch/login'
-const urlHealth = 'https://healthservice.priaid.ch'
-const apiKey = process.env.REACT_APP_KEY
-const secretKey = process.env.REACT_APP_SECRET_KEY
-const computedHash = HmacMD5(url, secretKey)
-const computedHashString = computedHash.toString(EncBase64)
+import { urlHealth, apiKey, computedHashString, url } from './constants';
 
 const data = {}
 const headers = { 'Authorization': `Bearer ${apiKey}:${computedHashString}`,
@@ -57,7 +48,7 @@ export const setToken = () => {
             })
          .catch(error => console.log('error:', error))
     }
-
-export const symptomsURL = `https://cors-anywhere.herokuapp.com/${urlHealth}/symptoms?token=${window.localStorage.getItem('authToken')}&language=en-gb`
+// https://cors-anywhere.herokuapp.com/
+export const symptomsURL = `${urlHealth}/symptoms?token=${window.localStorage.getItem('authToken')}&language=en-gb`
 export const symptomsURLPath = axios(symptomsURL)   
 
