@@ -19,11 +19,11 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
         }
    
   
-  const handleChangeGender =(selectedGender) => {
+  const handleChangeGender = (selectedGender) => {
     setSelectedGender(selectedGender)
     }
   
-  const handleChangeYob=(selectedYob) => {
+  const handleChangeYob= (selectedYob) => {
       setSelectedYob(selectedYob)
     }
    
@@ -51,7 +51,9 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
   
     function handleSubmit(e){
       e.preventDefault()
-      if(selectedSymptoms !== [] && selectedGender !==( ''||null ) && selectedYob !== ( ''||null )) {
+      if(selectedSymptoms !== [] 
+        && selectedGender !== ( '' || null ) 
+        && selectedYob !== ( ''||null )) {
          setopenModal(true);
       } else { 
 

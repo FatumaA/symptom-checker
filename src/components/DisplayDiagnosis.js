@@ -4,7 +4,12 @@ import Modal from 'react-modal'
 
 Modal.setAppElement('#root')
 
-const DisplayDiagnosis = ({selectedSymptoms, selectedGender, selectedYob, openModal, setopenModal, handleReset}) => {
+const DisplayDiagnosis = ({selectedSymptoms, 
+                           selectedGender, 
+                           selectedYob, 
+                           openModal, 
+                           setopenModal, 
+                           handleReset}) => {
 
   
   let symptoms = [selectedSymptoms]
@@ -13,7 +18,9 @@ const DisplayDiagnosis = ({selectedSymptoms, selectedGender, selectedYob, openMo
 
   const [diagnosisres, setDiagnosisres] = useState([])
   
-  const diagnosis =`https://healthservice.priaid.ch/login/diagnosis?token=${window.localStorage.getItem('authToken')}&language=en-gb&symptoms=${symptoms}&gender=${sex?.value}&year_of_birth=${yob?.value}`
+  const diagnosis =`https://healthservice.priaid.ch/login/diagnosis?token=
+                    ${window.localStorage.getItem('authToken')}&language=en-gb&symptoms=
+                    ${symptoms}&gender=${sex?.value}&year_of_birth=${yob?.value}`
   
 
 
