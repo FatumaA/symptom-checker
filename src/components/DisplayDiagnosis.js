@@ -32,30 +32,29 @@ const DisplayDiagnosis = ({selectedSymptoms,
   useEffect (() => {
     const getDiagnosis = async () => { 
       try {
-        debugger
        const response = await axios(diagnosis) 
-        debugger
        console.log(response.data)
        setDiagnosisres(response.data)
-     }
-      catch(err){
-          console.log(err)
-          return <div className='error'> 
-          Something went wrong, Please try later
-          </div>
-         }
-        
       }
+     catch(err){
+          console.log(err)
+          return (
+            <div className='error'> 
+                Something went wrong, Please try later
+            </div>
+        )}   
+      }
+      
       getDiagnosis()
       console.log('DIAGNOSIS RES!!!!!!!!!', diagnosisres)
        
-  },[])
+  },[diagnosis, diagnosisres])
 
    
   return(
     <>
     {(diagnosisres !== [] || undefined) &&
-     <Modal isOpen={openModal} onRequestClose={()=> { setopenModal(false); handleReset()}}>
+     <Modal isOpen={openModal} onRequestClose={() => { setopenModal(false); handleReset()}}>
         <div className='modal-content'
          style={{
           display:'inline',
@@ -87,7 +86,7 @@ const DisplayDiagnosis = ({selectedSymptoms,
             float: 'right',
             cursor: 'pointer'
           }}
-          onClick={()=>setopenModal(false)}>
+          onClick={()=> {setopenModal(false); handleReset()}}>
           <p> CLOSE </p>
         </div>
 
