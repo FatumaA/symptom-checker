@@ -56,27 +56,23 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
         && selectedYob !== ( ''||null )) {
          setopenModal(true);
       } else { 
-
         return (
-        <div className='error'>
-            Please check that the form is filled in correctly before submitting
-        </div>
+          <div className='error'>
+              Please check that the form is filled in correctly before submitting
+          </div>
         )
       }
-      // handleReset(e)
     }
 
 
-    const handleReset = (e) => { 
-      e.preventDefault()
+    const handleReset = () => { 
       setSelectedSymptoms([]);
       setSelectedGender(null);
       setSelectedYob(null);  
   }
-  // <div className='error'> App unavailable, please try later</div>
-  // <img scr='https://media.giphy.com/media/WiIuC6fAOoXD2/giphy.gif' alt=''/>
+  
   return (
-    isLoading?  <div className='error'> App unavailable, please try later</div> :
+    isLoading ?  <div className='error'> App unavailable, please try later</div> :
     <>
     <div className='form-container'>
     <form  onSubmit ={handleSubmit}>
@@ -84,7 +80,7 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
     <label htmlFor='Symptoms-input'>Please select your symptoms</label>
         <Select 
             className='holds-results'
-            placeholder='Select symptoms'
+            placeholder='Select Symptoms'
             options={options}
             isMulti
             isSearchable 
@@ -108,7 +104,7 @@ const DisplaySymptoms = ({symptoms, isLoading}) => {
       <label htmlFor='Birthyear-input'>Please select your birth year</label>
           <Select 
           className='holds-results'
-          placeholder='Select year'
+          placeholder='Select Year'
           // value={yob.find(selectedYob => selectedYob.label === selectedYob.value)}
           value = {selectedYob}
           onChange={handleChangeYob}

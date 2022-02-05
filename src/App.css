@@ -56,12 +56,12 @@ form{
 }
 label{
   font-size: 21px;
-  margin-bottom: 2px;
 }
 ::placeholder{
   opacity: 0.5;
 }
 .holds-results{
+  margin-top: 5px;
   margin-bottom: 10px;
   border: 1px #006b60 solid;
 }
