@@ -4,13 +4,13 @@ import Select from 'react-select'
 import DisplayDiagnosis from './DisplayDiagnosis'
 
 
-const DisplaySymptoms = ({symptoms, isLoading, isError}) => {
-  
+const DisplaySymptoms = ({symptoms, isLoading, isError, isTokenAbsent}) => {
   const [selectedSymptoms, setSelectedSymptoms] = useState([])
   const [selectedGender, setSelectedGender] = useState('')
   const [selectedYob, setSelectedYob] = useState('')
   
   const [openModal, setopenModal] = useState(false)
+  const [showComponent, setShowComponent] = useState(false)
   
   
   
@@ -45,15 +45,16 @@ const DisplaySymptoms = ({symptoms, isLoading, isError}) => {
                1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
                2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]
  
-    const yob= years.map((year, index) => ({ 'value': year, 'label': year }))
+    const yob= years.map((year) => ({ 'value': year, 'label': year }))
 
   
     function handleSubmit(e){
       e.preventDefault()
       if(selectedSymptoms !== [] 
-        && selectedGender !== ( '' || null ) 
-        && selectedYob !== ( ''||null )) {
-         setopenModal(true);
+          && selectedGender !== ( '' || null ) 
+          && selectedYob !== ( ''|| null )) {
+         setopenModal(true)
+         setShowComponent(true)
       } else { 
         return (
           <div className='error'>
@@ -74,58 +75,62 @@ const DisplaySymptoms = ({symptoms, isLoading, isError}) => {
     isLoading && !isError ? <div className='loading'> <div></div> </div>  :
     isError && !isLoading ?  <div className='error'> App unavailable, please try later</div> :
     <>
-    <div className='form-container'>
-    <form  onSubmit = { handleSubmit }>
+      <div className='form-container'>
+      <form  onSubmit = { handleSubmit }>
 
-    <label htmlFor='Symptoms-input'>Please select your symptoms</label>
-        <Select 
+      <label htmlFor='Symptoms-input'>Please select your symptoms</label>
+          <Select 
+              className='holds-results'
+              placeholder='Select Symptoms'
+              options={options}
+              isMulti
+              isSearchable 
+              isClearable
+              value={options.filter(obj => selectedSymptoms.includes(obj.value))}
+              onChange={handleChange}
+              defaultValue=''  
+              />
+          
+      <label htmlFor='Gender-input'>Please select your gender</label>
+          <Select 
             className='holds-results'
-            placeholder='Select Symptoms'
-            options={options}
-            isMulti
-            isSearchable 
-            isClearable
-            value={options.filter(obj => selectedSymptoms.includes(obj.value))}
-            onChange={handleChange}
-            defaultValue=''  
+            placeholder='Select Gender'
+            value = {selectedGender}
+            onChange={handleChangeGender}
+            options={gender}
+            defaultValue=''
             />
         
-    <label htmlFor='Gender-input'>Please select your gender</label>
-         <Select 
-          className='holds-results'
-          placeholder='Select Gender'
-          value = {selectedGender}
-          onChange={handleChangeGender}
-          options={gender}
-          defaultValue=''
-          />
+        <label htmlFor='Birthyear-input'>Please select your birth year</label>
+            <Select 
+            className='holds-results'
+            placeholder='Select Year'
+            value = {selectedYob}
+            onChange={handleChangeYob}
+            options={yob}
+            isSearchable 
+            defaultValue=''
+            /> 
       
-      <label htmlFor='Birthyear-input'>Please select your birth year</label>
-          <Select 
-          className='holds-results'
-          placeholder='Select Year'
-          value = {selectedYob}
-          onChange={handleChangeYob}
-          options={yob}
-          isSearchable 
-          defaultValue=''
-          /> 
-    
-    <button type='submit' className='btn-primary'> Submit </button>
+      <button type='submit' className='btn-primary'> Submit </button>
 
-    </form>
+      </form>
 
-    <button className='btn-secondary'
-    onClick={handleReset}> Reset Form </button>
-
-    <DisplayDiagnosis selectedSymptoms={selectedSymptoms} 
-        selectedYob={selectedYob}
-        selectedGender={selectedGender}
-        openModal={openModal}
-        setopenModal={setopenModal}
-        handleReset={handleReset} 
-        />
-  </div> 
+      <button className='btn-secondary'
+      onClick={handleReset}> Reset Form </button>
+      
+      {
+        showComponent ?
+          <DisplayDiagnosis selectedSymptoms={selectedSymptoms} 
+              selectedYob={selectedYob}
+              selectedGender={selectedGender}
+              openModal={openModal}
+              setopenModal={setopenModal}
+              handleReset={handleReset} 
+              isTokenAbsent={isTokenAbsent}
+              /> : null
+      }
+    </div> 
     </>
   )
     

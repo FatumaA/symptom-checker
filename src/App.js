@@ -19,7 +19,6 @@ const App = () => {
     const getSymptoms = async () => { 
         try{
             const result = await symptomsURLPath
-            console.log(result.data)
             setSymptoms(result.data)
             setIsLoading(false)
         } 
@@ -27,7 +26,7 @@ const App = () => {
             console.log('error', e)
             if(e.response.status === 400) {
                 window.localStorage.clear()
-                setToken()     
+                setToken('symptoms')     
             }
             setIsError(true)
         }
@@ -47,7 +46,7 @@ const App = () => {
         <div className='top-style'>
           <Header className='header-style'/>
           <DisplaySymptoms className='second-section-style' 
-            isLoading={isLoading} isError={isError} symptoms={symptoms} />
+            isLoading={isLoading} isTokenAbsent={isTokenAbsent} isError={isError} symptoms={symptoms} />
         </div>
         </>
     )

@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import Modal from 'react-modal'
+import { urlHealth } from '../helpers/constants'
+import { storedToken, setToken } from '../helpers/axios'
 
 Modal.setAppElement('#root')
 
@@ -9,7 +11,8 @@ const DisplayDiagnosis = ({selectedSymptoms,
                            selectedYob, 
                            openModal, 
                            setopenModal, 
-                           handleReset}) => {
+                           handleReset,
+                           isTokenAbsent }) => {
 
   
   let symptoms = [selectedSymptoms]
@@ -18,37 +21,29 @@ const DisplayDiagnosis = ({selectedSymptoms,
 
   const [diagnosisres, setDiagnosisres] = useState([])
   
-  const diagnosis =`https://healthservice.priaid.ch/login/diagnosis?token=
-                    ${window.localStorage.getItem('authToken')}&language=en-gb&symptoms=
-                    ${symptoms}&gender=${sex?.value}&year_of_birth=${yob?.value}`
-  
-
-
-  
-    console.log('symptoms', symptoms)
-    console.log('gender', sex)
-    console.log('birthday', yob)
+  const diagnosis =`${urlHealth}/diagnosis?token=${storedToken}&language=en-gb&symptoms=[${symptoms}]&gender=${sex?.value}&year_of_birth=${yob?.value}`
 
   useEffect (() => {
     const getDiagnosis = async () => { 
       try {
-       const response = await axios(diagnosis) 
-       console.log(response.data)
-       setDiagnosisres(response.data)
+        const response = await axios(diagnosis) 
+        setDiagnosisres(response.data)
       }
-     catch(err){
-          console.log(err)
-          return (
-            <div className='error'> 
-                Something went wrong, Please try later
-            </div>
-        )}   
-      }
-      
+      catch(e){
+          console.log(e)
+          if(e.response?.status === 400) {
+            window.localStorage.clear()
+            setToken('')     
+        }
+      }   
+    }
+    if(isTokenAbsent){
+      setToken('')
       getDiagnosis()
-      console.log('DIAGNOSIS RES!!!!!!!!!', diagnosisres)
-       
-  },[diagnosis, diagnosisres])
+    } else {
+        getDiagnosis() 
+    }  
+  },[diagnosis, diagnosisres, isTokenAbsent])
 
    
   return(
@@ -66,7 +61,7 @@ const DisplayDiagnosis = ({selectedSymptoms,
           marginBottom: '30px'
         }}> Your Diagnosis in Order of Likelihood </h3> 
          
-         {(diagnosisres === [] || null)}{ <div className='error'> 
+         {!!diagnosisres ?? <div className='error'> 
           No symptoms available for stated conditions
         </div> }
        

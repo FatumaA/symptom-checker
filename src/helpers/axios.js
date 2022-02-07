@@ -8,12 +8,16 @@ let token;
 
 
 // gets and stores the token from the apimedic api
-export const setToken = () => { 
+export const setToken = (hint) => { 
             axios.post(url, data, { headers })
             .then(response => { 
+                if(hint === 'symptoms') {
+                    token = response.data.Token; 
+                    window.localStorage.setItem('authToken', token)
+                    window.location.reload()
+                }
                 token = response.data.Token; 
                 window.localStorage.setItem('authToken', token)
-                window.location.reload()
                })
             .catch(error => console.log('error:', error))
     }
